@@ -6,12 +6,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
+    <link rel="stylesheet" href="/assets/style.css">    
 </head>
-
 <body>
-    <p class="test">test</p>
-    <script src="./assets/spotify-web-api.js"></script>
+    <nav class="navbar">
+        <a class="home" href="home.html">Home</a>
+        <a class="sources" href="sources.html">Sources</a>
+        <input class="searchbox" type="text" placeholder="Search..">
+    </nav>
+    <div class="row-before-albums"><h2>Trending Albums</h2></div>
+    <div class="trending-albums"></div>
+    <div class="row-before-singles"><h2>Trending Singles</h2></div>
+    <div class="trending-singles">
+        <div class="subsection-singles"></div>
+    </div>
+    <div class="row-before-rec"><h2>You might like these...</h2></div>
+    <div class="recommendations"></div>
+    <div class="row-before-searched"><h2>Recently Searched</h2></div>
+    <div class="recently-searched"></div>
+
     <script src="./assets/scripts.js"></script>
 </body>
 
