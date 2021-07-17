@@ -1,3 +1,19 @@
+// DOM elements
+var navBarEl = document.querySelector(".navbar");
+var homeLinkEl = document.querySelector(".home");
+var sourcesLinkEl = document.querySelector(".sources");
+var searchBoxEl = document.querySelector(".search-box");
+var rowBeforeAlbumsEl = document.querySelector(".row-before-albums");
+var trendingAlbumsEl = document.querySelector(".trending-albums");
+var rowBeforeSinglesEl = document.querySelector(".row-before-singles");
+var trendingSinglesEl = document.querySelector(".trending-singles");
+var subsectionSinglesEl = document.querySelector(".subsection-singles");
+var rowBeforeRecommendationsEl = document.querySelector(".row-before-rec");
+var recommendationsEl = document.querySelector(".recommendations");
+var rowBeforeSearchedEl = document.querySelector(".row-before-searched");
+var recentlySearchedEl = document.querySelector(".recently-searched");
+
+
 var bandName = "Muse";
 var apiKeySpotify = "BQC30pAzOiJa6r6r3lmOxxue8eeHaJsy6jn6SBpp4tklI0SkXlxpUkxgVKqAs9Uv0G7FQOLizaSmZ45_XFWILXo5V7VqVhHS_M2LwYUrBotfk7xtX4L-LySXVzr_SiXdYvkZbcI84A";
 var apiKeyDiscogs = "ZkPKfcbrCFxLTLxNSjiZlgnTrLWdqMuIPPYUvVMx";
