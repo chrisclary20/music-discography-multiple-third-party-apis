@@ -18,12 +18,16 @@ var currentYear = moment().year();
 //these would typically not be shown on the front end
 var apiKeySpotify = "BQCGIehYvduzpeprozD9T0YqWx_b9zVTzyRdIYcMo9ka2gw3VTAcShZ9yMAsfQ4HXvS4gPoI4ysIrM1XcNdSE98PftKvOWmA4JwRJ9114HjHF_TzdZbpHwYQUK_ZL0cSq8wVGZYfLQ-KPAA";
 var apiKeyDiscogs = "ZkPKfcbrCFxLTLxNSjiZlgnTrLWdqMuIPPYUvVMx";
-var apiKeyYouTube = "AIzaSyCwB3g3unr3dVHwdzwiNXYYBKOoooVBS_Y";
+//if quota is reached, create a new project then api key here: https://console.developers.google.com/apis/api/youtube.googleapis.com/overview?project=452704620540 and then update variable
+var apiKeyYouTube = "AIzaSyCLtTtkim06HaBcHaSgqcua8vIt13zZ1js";
 
-
+//https://console.developers.google.com/apis/api/youtube.googleapis.com/overview?project=452704620540
 //https://www.googleapis.com/youtube/v3/search?part=snippet&q=php&key=AIzaSyCwB3g3unr3dVHwdzwiNXYYBKOoooVBS_Y
-function youTubeTest(userEntry, apiKey) {
-    var constructedUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" +
+// https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&qhip+hop&key=AIzaSyCLtTtkim06HaBcHaSgqcua8vIt13zZ1js
+//https://www.googleapis.com/youtube/v3/videos?id=BJzmJxLncO4&key=AIzaSyCLtTtkim06HaBcHaSgqcua8vIt13zZ1js&part=status
+function getYouTubeRecommendations(userEntry, NumOfResults, apiKey) {
+    var constructedUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=" + NumOfResults +
+        "&order=relevance&q=" +
         userEntry +
         "&key=" + apiKey;
     var results = getYouTubeApi(constructedUrl);
@@ -32,9 +36,21 @@ function youTubeTest(userEntry, apiKey) {
     });
 }
 
+//https://www.googleapis.com/youtube/v3/videos?id=6CQEZ_kas0I&key=AIzaSyBQ2FNzqY1x54ZKwVKjCtRAyFOQKyR3wnI&part=snippet,contentDetails,status
+//https://www.youtube.com/get_video_info?video_id=6CQEZ_kas0I
+
 //update DOM with YouTube data 
 function updateYouTubeDom(results) {
     console.log(results);
+    var html = "";
+    for (let i = 0; i < results.length; i++) {
+        const ele = results[i];
+        html = "<a href='https://www.youtube.com/watch?v=" + ele.videoId + "' target='_blank'><img class='album-art' src='" + ele.image.url + "' alt='" + ele.title + "'><h5>Title: " +
+            ele.title + "</h5></a><p>Channel Name: " + ele.channelName + "</p><p>Created: " +
+            ele.created + "</p>";
+        recommendationsEl.innerHTML += html;
+    }
+
 }
 
 async function getYouTubeApi(constructedUrl) {
@@ -49,9 +65,14 @@ async function getYouTubeApi(constructedUrl) {
             var ele = data.items[i];
             var resultObject = {
                 title: ele.snippet.title,
-                videoId: ele.id.videoId
+                videoId: ele.id.videoId,
+                image: ele.snippet.thumbnails.medium,
+                created: moment(ele.snippet.publishTime).format("MM-DD-YYYY"),
+                channelName: ele.snippet.channelTitle
             }
-            resultObjects.push(resultObject);
+            if (resultObject.videoId) {
+                resultObjects.push(resultObject);
+            }
         }
         console.log(data);
     });
@@ -74,6 +95,24 @@ function getTrendingAlbums(rankThreshold, year, apiKey) {
 //update DOM for trending albums 
 function updateTrendingAlbumDom(resultAlbums) {
     console.log(resultAlbums);
+    //trendingAlbumsEl
+    var html = "";
+    var genres = "";
+    for (let i = 0; i < resultAlbums.length; i++) {
+        const ele = resultAlbums[i];
+        for (let f = 0; f < ele.genre.length; f++) {
+            genres += ele.genre[f];
+            if (f < ele.genre.length - 1) {
+                genres += " | ";
+            }
+        }
+        html = "<img class='album-art' src='" + ele.image + "' alt='" + ele.title + "'><h5>Title: " +
+            ele.title + "</h5><p>Genres: " + genres + "</p><p>Label: " + ele.label[0] + "</p><p></p>";
+        trendingAlbumsEl.innerHTML += html;
+        genres = "";
+    }
+
+
 }
 
 //get trending singles
@@ -90,10 +129,26 @@ function getTrendingSingles(rankThreshold, year, apiKey) {
 }
 
 //update DOM for trending singles 
-function updateTrendingSinglesDom(trendingSingles) {
-    console.log(trendingSingles);
+//TODO: similar to updateTrendingAlbumDom - refactor function
+function updateTrendingSinglesDom(resultAlbums) {
+    console.log(resultAlbums);
+    //trendingAlbumsEl
+    var html = "";
+    var genres = "";
+    for (let i = 0; i < resultAlbums.length; i++) {
+        const ele = resultAlbums[i];
+        for (let f = 0; f < ele.genre.length; f++) {
+            genres += ele.genre[f];
+            if (f < ele.genre.length - 1) {
+                genres += " | ";
+            }
+        }
+        html = "<img class='album-art' src='" + ele.image + "' alt='" + ele.title + "'><h5>Title: " +
+            ele.title + "</h5><p>Genres: " + genres + "</p><p>Label: " + ele.label[0] + "</p><p></p>";
+        subsectionSinglesEl.innerHTML += html;
+        genres = "";
+    }
 }
-
 //get recommended albums (you might like this...)
 //https://api.discogs.com/database/search?genre=hip+hop&token=ZkPKfcbrCFxLTLxNSjiZlgnTrLWdqMuIPPYUvVMx
 //currently spaces need to be passed as + sign, this might need to be checked for somewhere and logic added
@@ -162,8 +217,6 @@ async function callDiscogsApi(constructedUrl, rankThreshold) {
     return resultObjects;
 }
 
-//
-
 //https://github.com/JMPerez/spotify-web-api-js
 function getSpotifyApiTestUsingLibrary(bandId, apiKey) {
     var spotifyApi = new SpotifyWebApi();
@@ -173,6 +226,11 @@ function getSpotifyApiTestUsingLibrary(bandId, apiKey) {
         if (err) console.error(err);
         else console.log('Artist albums', data);
     });
+}
+
+//replace space with plus to pass to API URLs
+function replaceSpaceWithPlus(str) {
+    return str.replace(/\s+/g, '+');
 }
 
 //runs when page loads
@@ -189,12 +247,16 @@ function onLoad() {
     //gets and prints from spotify
     // getSpotifyApiTestUsingLibrary("43ZHCT0cAZBISjO8DG9PnE", apiKeySpotify);
 
-    // getTrendingAlbums(500, currentYear, apiKeyDiscogs);
-    // getTrendingSingles(5, currentYear, apiKeyDiscogs);
     // getRecommendedAlbums(2000, "Hip+Hop", apiKeyDiscogs);
     // getSearchResults(0, "jay-z", apiKeyDiscogs);
-    // getSearchResults(0, "Hip+Hop", apiKeyDiscogs);
-    youTubeTest("hip+hop", apiKeyYouTube);
+    // getSearchResults(0, replaceSpaceWithPlus("Hip Hop"), apiKeyDiscogs);
+    // youTubeTest(replaceSpaceWithPlus("hip hop"), apiKeyYouTube);
+
+
+    //Run these to show on DOM
+    getTrendingAlbums(500, currentYear, apiKeyDiscogs);
+    getTrendingSingles(5, currentYear, apiKeyDiscogs);
+    getYouTubeRecommendations(replaceSpaceWithPlus("hip hop"), 12, apiKeyYouTube);
 }
 
 onLoad();

@@ -1,3 +1,8 @@
 .test {
     color: green
 }
+
+.album-art {
+    height: 100px;
+    width: 100px;
+}
