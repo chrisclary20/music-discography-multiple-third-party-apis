@@ -5,65 +5,115 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/grids-responsive-min.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet"> 
-    <link rel="stylesheet" href="assets/style.css">
+    <title>Music Discography</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="./assets/cards.css">
+    <link rel="stylesheet" href="./assets/style.css">
 </head>
 
 <body>
 
-    <nav class="pure-menu">
-        <a href="#" class="pure-menu-heading pure-menu-link">BRAND</a>
-        <ul class="pure-menu-list">
-            <li class="pure-menu-item">
-                <Home href="#" class="pure-menu-link"><div class="home">Home</div></a>    
-            </li>
-            <li class="pure-menu-item">   
-                <a href="#" class="pure-menu-link"><div class="sources">Sources</div></a>
-            </li>
-            <li class="pure-menu-item">
-                <div class="searchbox">
-                <a href="#" class="pure-menu-link"><input class="search-box" type="text" placeholder="Search.."></a>
+    <!-- START NAV -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="#">
+                    <img class="nav-bar" src="./assets/discogra-logo.png" alt="Logo">
+                </a>
+                <span class="navbar-burger burger" data-target="navbarMenu">
+            <span></span>
+                <span></span>
+                <span></span>
+                </span>
+            </div>
+            <div id="navbarMenu" class="navbar-menu">
+                <div class="navbar-end">
+                    <a class="navbar-item is-active">
+              Home
+            </a>
+                    <a class="navbar-item">
+              Examples
+            </a>
+                    <a class="navbar-item">
+              Features
+            </a>
+                    <a class="navbar-item">
+              Team
+            </a>
+                    <a class="navbar-item">
+              Archives
+            </a>
+                    <a class="navbar-item">
+              Help
+            </a>
                 </div>
-            </li>
-        </ul>
+            </div>
+        </div>
     </nav>
+    <!-- END NAV -->
 
-    <br>
-    <br>
+    <div class="container">
+        <div class="section">
+            <div class="column has-text-centered">
+                <h1>Trending Singles</h1>
+            </div>
+            <div class="row columns">
+                <div class="column is-one-fifth">
+                    <div class="card large">
+                        <div class="card-image">
+                            <figure class="image">
+                                <img src="https://source.unsplash.com/uzDLtlPY8kQ" alt="Image">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-content">
+                                    <p class="title is-4 no-padding">McSocks</p>
+                                    <p><span class="title is-6"><a href="http://twitter.com/#">@twitterid</a></span></p>
+                                    <p class="subtitle is-6">Developer</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-one-fifth">
+                    <div class="card large">
+                        <div class="card-image">
+                            <figure class="image">
+                                <img src="https://source.unsplash.com/uzDLtlPY8kQ" alt="Image">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="media">
 
-<!-- Trending subjects -->
-  <div class="grid">
-    <div class="pure-u-1"><h2>Trending Albums</h2></div>
-    <div class="pure-u-1-1"></div>
+                                <div class="media-content">
+                                    <p class="title is-4 no-padding">McSocks</p>
+                                    <p><span class="title is-6"><a href="http://twitter.com/#">@twitterid</a></span></p>
+                                    <p class="subtitle is-6">Developer</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered">
+                <div class="soc">
+                    <a href="https://github.com/DavidTunnell/music-discography-multiple-third-party-apis"><i class="fa fa-github-alt fa-lg" aria-hidden="true"></i></a>
+                </div>
+                <p>
+                    <strong>Discogra Music Finding</strong>
+                    <span class="current-year">
+                        </span>
+                </p>
+            </div>
+        </div>
+    </footer>
 
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-
-    <div class="pure-u-1"><h2>Trending Singles</h2></div>
-    <div class="pure-u-1-1"></div>
-
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-
-    <div class="pure-u-1"><h2>You might like this...</h2></div>
-    <div class="pure-u-1-1"></div>
-  </div>
-    
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
-    <script type="text/javascript" src="./assets//spotify-web-api.js"></script>
     <script src="./assets/scripts.js"></script>
 </body>
 

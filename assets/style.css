@@ -1,8 +1,13 @@
-.test {
-    color: green
+body {
+    color: ghostwhite;
 }
 
 .album-art {
     height: 100px;
     width: 100px;
+}
+
+.nav-bar {
+    width: 30%;
+    padding: 10px 0 10px 0;
 }

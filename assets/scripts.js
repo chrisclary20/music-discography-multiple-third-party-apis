@@ -12,6 +12,7 @@ var rowBeforeRecommendationsEl = document.querySelector(".row-before-rec");
 var recommendationsEl = document.querySelector(".recommendations");
 var rowBeforeSearchedEl = document.querySelector(".row-before-searched");
 var recentlySearchedEl = document.querySelector(".recently-searched");
+var yearEl = document.querySelector(".current-year");
 
 //variables
 var currentYear = moment().year();
@@ -20,6 +21,9 @@ var apiKeySpotify = "BQCGIehYvduzpeprozD9T0YqWx_b9zVTzyRdIYcMo9ka2gw3VTAcShZ9yMA
 var apiKeyDiscogs = "ZkPKfcbrCFxLTLxNSjiZlgnTrLWdqMuIPPYUvVMx";
 //if quota is reached, create a new project then api key here: https://console.developers.google.com/apis/api/youtube.googleapis.com/overview?project=452704620540 and then update variable
 var apiKeyYouTube = "AIzaSyCLtTtkim06HaBcHaSgqcua8vIt13zZ1js";
+
+//set DOM year
+yearEl.innerHTML = currentYear;
 
 //https://console.developers.google.com/apis/api/youtube.googleapis.com/overview?project=452704620540
 //https://www.googleapis.com/youtube/v3/search?part=snippet&q=php&key=AIzaSyCwB3g3unr3dVHwdzwiNXYYBKOoooVBS_Y
@@ -50,7 +54,6 @@ function updateYouTubeDom(results) {
             ele.created + "</p>";
         recommendationsEl.innerHTML += html;
     }
-
 }
 
 async function getYouTubeApi(constructedUrl) {
@@ -217,17 +220,6 @@ async function callDiscogsApi(constructedUrl, rankThreshold) {
     return resultObjects;
 }
 
-//https://github.com/JMPerez/spotify-web-api-js
-function getSpotifyApiTestUsingLibrary(bandId, apiKey) {
-    var spotifyApi = new SpotifyWebApi();
-    spotifyApi.setAccessToken(apiKey);
-    // get Elvis' albums, passing a callback. When a callback is passed, no Promise is returned
-    spotifyApi.getArtistAlbums(bandId, function(err, data) {
-        if (err) console.error(err);
-        else console.log('Artist albums', data);
-    });
-}
-
 //replace space with plus to pass to API URLs
 function replaceSpaceWithPlus(str) {
     return str.replace(/\s+/g, '+');
@@ -236,22 +228,6 @@ function replaceSpaceWithPlus(str) {
 //runs when page loads
 function onLoad() {
     // /database/search ? q = { query } & { ? type, title, release_title, credit, artist, anv, label, genre, style, country, year, format, catno, barcode, track, submitter, contributor }
-
-
-    //gets and prints from discog
-    // var test = getDiscogsApiTest(bandName, apiKeyDiscogs);
-    // test.then((data) => {
-    //     console.log(data);
-    // });
-
-    //gets and prints from spotify
-    // getSpotifyApiTestUsingLibrary("43ZHCT0cAZBISjO8DG9PnE", apiKeySpotify);
-
-    // getRecommendedAlbums(2000, "Hip+Hop", apiKeyDiscogs);
-    // getSearchResults(0, "jay-z", apiKeyDiscogs);
-    // getSearchResults(0, replaceSpaceWithPlus("Hip Hop"), apiKeyDiscogs);
-    // youTubeTest(replaceSpaceWithPlus("hip hop"), apiKeyYouTube);
-
 
     //Run these to show on DOM
     getTrendingAlbums(500, currentYear, apiKeyDiscogs);
