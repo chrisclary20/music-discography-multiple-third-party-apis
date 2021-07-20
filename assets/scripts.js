@@ -109,8 +109,9 @@ function updateTrendingAlbumDom(resultAlbums) {
                 genres += " | ";
             }
         }
-        html = "<img class='album-art' src='" + ele.image + "' alt='" + ele.title + "'><h5>Title: " +
-            ele.title + "</h5><p>Genres: " + genres + "</p><p>Label: " + ele.label[0] + "</p><p></p>";
+        // html = "<img class='album-art' src='" + ele.image + "' alt='" + ele.title + "'><h5>Title: " +
+        //     ele.title + "</h5><p>Genres: " + genres + "</p><p>Label: " + ele.label[0] + "</p><p></p>";
+        html = "";
         trendingAlbumsEl.innerHTML += html;
         genres = "";
     }
@@ -135,10 +136,12 @@ function getTrendingSingles(rankThreshold, year, apiKey) {
 //TODO: similar to updateTrendingAlbumDom - refactor function
 function updateTrendingSinglesDom(resultAlbums) {
     console.log(resultAlbums);
-    //trendingAlbumsEl
+    //randomize the array
+    shuffleArray(resultAlbums);
     var html = "";
     var genres = "";
-    for (let i = 0; i < resultAlbums.length; i++) {
+    var numOfResults = resultAlbums.length; //max would be resultAlbums.length
+    for (let i = 4; i < numOfResults; i++) {
         const ele = resultAlbums[i];
         for (let f = 0; f < ele.genre.length; f++) {
             genres += ele.genre[f];
@@ -146,12 +149,17 @@ function updateTrendingSinglesDom(resultAlbums) {
                 genres += " | ";
             }
         }
-        html = "<img class='album-art' src='" + ele.image + "' alt='" + ele.title + "'><h5>Title: " +
-            ele.title + "</h5><p>Genres: " + genres + "</p><p>Label: " + ele.label[0] + "</p><p></p>";
-        subsectionSinglesEl.innerHTML += html;
+        html = "<div class='column is-one-fifth has-text-centered'><div class='card large'><div class='card-image'><figure class='image'><img src='" +
+            ele.image + "' alt='" +
+            ele.title + "'></figure></div><div class='card-content'><div class='media'><div class='media-content'><p class='card-title'>" +
+            ele.title + "</p><p class='card-info'>" +
+            genres + "</p><p class='card-info'>" +
+            ele.label[0] + "</p></div></div></div></div></div>";
+        trendingSinglesEl.innerHTML += html;
         genres = "";
     }
 }
+
 //get recommended albums (you might like this...)
 //https://api.discogs.com/database/search?genre=hip+hop&token=ZkPKfcbrCFxLTLxNSjiZlgnTrLWdqMuIPPYUvVMx
 //currently spaces need to be passed as + sign, this might need to be checked for somewhere and logic added
@@ -223,6 +231,17 @@ async function callDiscogsApi(constructedUrl, rankThreshold) {
 //replace space with plus to pass to API URLs
 function replaceSpaceWithPlus(str) {
     return str.replace(/\s+/g, '+');
+}
+
+//Shuffles an array to randomize
+// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
 }
 
 //runs when page loads

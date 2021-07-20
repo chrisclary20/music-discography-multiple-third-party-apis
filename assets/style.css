@@ -11,3 +11,12 @@ body {
     width: 30%;
     padding: 10px 0 10px 0;
 }
+
+.card-title {
+    font-size: x-small;
+    font-weight: bold;
+}
+
+.card-info {
+    font-size: xx-small;
+}
