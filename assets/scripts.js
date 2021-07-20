@@ -1,33 +1,39 @@
 // DOM elements
-var navBarEl = document.querySelector(".navbar");
-var homeLinkEl = document.querySelector(".home");
-var sourcesLinkEl = document.querySelector(".sources");
-var searchBoxEl = document.querySelector(".search-box");
-var rowBeforeAlbumsEl = document.querySelector(".row-before-albums");
-var trendingAlbumsEl = document.querySelector(".trending-albums");
-var rowBeforeSinglesEl = document.querySelector(".row-before-singles");
 var trendingSinglesEl = document.querySelector(".trending-singles");
-var subsectionSinglesEl = document.querySelector(".subsection-singles");
-var rowBeforeRecommendationsEl = document.querySelector(".row-before-rec");
 var recommendationsEl = document.querySelector(".recommendations");
-var rowBeforeSearchedEl = document.querySelector(".row-before-searched");
-var recentlySearchedEl = document.querySelector(".recently-searched");
 var yearEl = document.querySelector(".current-year");
+var searchUserInputEl = document.querySelector(".search-user-input");
+var searchButtonEl = document.querySelector(".user-search-button");
+var searchHistoryEl = document.querySelector(".search-history");
 
 //variables
 var currentYear = moment().year();
 //these would typically not be shown on the front end
 var apiKeyDiscogs = "ZkPKfcbrCFxLTLxNSjiZlgnTrLWdqMuIPPYUvVMx";
 //if quota is reached, create a new project then api key here: https://console.developers.google.com/apis/api/youtube.googleapis.com/overview?project=452704620540 and then update variable
-var apiKeyYouTube = "AIzaSyDcSsNiq6095Ui61rIV0COlIgEed_CsVPg";
+var apiKeyYouTube = "AIzaSyBQ2FNzqY1x54ZKwVKjCtRAyFOQKyR3wnI";
 
 //set DOM year
 yearEl.innerHTML = currentYear;
 
-//https://console.developers.google.com/apis/api/youtube.googleapis.com/overview?project=452704620540
-//https://www.googleapis.com/youtube/v3/search?part=snippet&q=php&key=AIzaSyCwB3g3unr3dVHwdzwiNXYYBKOoooVBS_Y
-// https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&qhip+hop&key=AIzaSyCLtTtkim06HaBcHaSgqcua8vIt13zZ1js
-//https://www.googleapis.com/youtube/v3/videos?id=BJzmJxLncO4&key=AIzaSyCLtTtkim06HaBcHaSgqcua8vIt13zZ1js&part=status
+//event listeners
+searchButtonEl.addEventListener("click", function() {
+    var userEntry = searchUserInputEl.value;
+    addRecentSearchButton(userEntry)
+});
+
+function addRecentSearchButton(userEntry) {
+    //add to DOM
+    var html = "<button class='button is-info is-medium is-fullwidth'>" + userEntry + "</button>";
+    searchHistoryEl.innerHTML += html;
+    //add to json local storage array
+
+    //clear search
+    searchUserInputEl.value = "";
+}
+
+
+//get recommendations from YouTube
 function getYouTubeRecommendations(userEntry, NumOfResults, apiKey) {
     var constructedUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=" + NumOfResults +
         "&order=relevance&q=" +
@@ -39,12 +45,8 @@ function getYouTubeRecommendations(userEntry, NumOfResults, apiKey) {
     });
 }
 
-//https://www.googleapis.com/youtube/v3/videos?id=6CQEZ_kas0I&key=AIzaSyBQ2FNzqY1x54ZKwVKjCtRAyFOQKyR3wnI&part=snippet,contentDetails,status
-//https://www.youtube.com/get_video_info?video_id=6CQEZ_kas0I
-
 //update DOM with YouTube data 
 function updateYouTubeDom(results) {
-    console.log(results);
     shuffleArray(results);
     var html = "";
     var maxLength = 8;
@@ -84,7 +86,6 @@ async function getYouTubeApi(constructedUrl) {
                 resultObjects.push(resultObject);
             }
         }
-        console.log(data);
     });
     return resultObjects;
 }
@@ -104,7 +105,6 @@ function getTrendingAlbums(rankThreshold, year, apiKey) {
 
 //update DOM for trending albums 
 function updateTrendingAlbumDom(resultAlbums) {
-    console.log(resultAlbums);
     //trendingAlbumsEl
     var html = "";
     var genres = "";
@@ -142,12 +142,11 @@ function getTrendingSingles(rankThreshold, year, apiKey) {
 //update DOM for trending singles 
 //TODO: similar to updateTrendingAlbumDom - refactor function
 function updateTrendingSinglesDom(resultAlbums) {
-    console.log(resultAlbums);
     //randomize the array
     shuffleArray(resultAlbums);
     var html = "";
     var genres = "";
-    var numOfResults = resultAlbums.length; //max would be resultAlbums.length
+    var numOfResults = 5; //max would be resultAlbums.length
     for (let i = 0; i < numOfResults; i++) {
         const ele = resultAlbums[i];
         for (let f = 0; f < ele.genre.length; f++) {
@@ -258,7 +257,7 @@ function onLoad() {
     //Run these to show on DOM
     // getTrendingAlbums(500, currentYear, apiKeyDiscogs);
     getTrendingSingles(5, currentYear, apiKeyDiscogs);
-    getYouTubeRecommendations(replaceSpaceWithPlus("hip hop"), 12, apiKeyYouTube);
+    // getYouTubeRecommendations(replaceSpaceWithPlus("hip hop"), 12, apiKeyYouTube);
 }
 
 onLoad();
