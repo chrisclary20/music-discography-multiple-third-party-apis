@@ -17,10 +17,9 @@ var yearEl = document.querySelector(".current-year");
 //variables
 var currentYear = moment().year();
 //these would typically not be shown on the front end
-var apiKeySpotify = "BQCGIehYvduzpeprozD9T0YqWx_b9zVTzyRdIYcMo9ka2gw3VTAcShZ9yMAsfQ4HXvS4gPoI4ysIrM1XcNdSE98PftKvOWmA4JwRJ9114HjHF_TzdZbpHwYQUK_ZL0cSq8wVGZYfLQ-KPAA";
 var apiKeyDiscogs = "ZkPKfcbrCFxLTLxNSjiZlgnTrLWdqMuIPPYUvVMx";
 //if quota is reached, create a new project then api key here: https://console.developers.google.com/apis/api/youtube.googleapis.com/overview?project=452704620540 and then update variable
-var apiKeyYouTube = "AIzaSyCLtTtkim06HaBcHaSgqcua8vIt13zZ1js";
+var apiKeyYouTube = "AIzaSyDcSsNiq6095Ui61rIV0COlIgEed_CsVPg";
 
 //set DOM year
 yearEl.innerHTML = currentYear;
@@ -46,12 +45,20 @@ function getYouTubeRecommendations(userEntry, NumOfResults, apiKey) {
 //update DOM with YouTube data 
 function updateYouTubeDom(results) {
     console.log(results);
+    shuffleArray(results);
     var html = "";
+    var maxLength = 8;
+    if (results.length < 8) {
+        maxLength = results.length;
+    }
     for (let i = 0; i < results.length; i++) {
         const ele = results[i];
-        html = "<a href='https://www.youtube.com/watch?v=" + ele.videoId + "' target='_blank'><img class='album-art' src='" + ele.image.url + "' alt='" + ele.title + "'><h5>Title: " +
-            ele.title + "</h5></a><p>Channel Name: " + ele.channelName + "</p><p>Created: " +
-            ele.created + "</p>";
+        html = "<div class='column is-3'><a href='https://www.youtube.com/watch?v=" +
+            ele.videoId + "' target='_blank'><div class='card'><div class='card-image'><figure class='image is-4by3'><img src='" +
+            ele.image.url + "' alt='" +
+            ele.title + "'></figure></div><div class='card-content'><p class='card-title'>" +
+            ele.title + "</p><p class='card-info'>" +
+            ele.created + "</p></div></div></a></div>";
         recommendationsEl.innerHTML += html;
     }
 }
@@ -70,7 +77,7 @@ async function getYouTubeApi(constructedUrl) {
                 title: ele.snippet.title,
                 videoId: ele.id.videoId,
                 image: ele.snippet.thumbnails.medium,
-                created: moment(ele.snippet.publishTime).format("MM-DD-YYYY"),
+                created: moment(ele.snippet.publishTime).format("M-DD-YYYY"),
                 channelName: ele.snippet.channelTitle
             }
             if (resultObject.videoId) {
@@ -141,7 +148,7 @@ function updateTrendingSinglesDom(resultAlbums) {
     var html = "";
     var genres = "";
     var numOfResults = resultAlbums.length; //max would be resultAlbums.length
-    for (let i = 4; i < numOfResults; i++) {
+    for (let i = 0; i < numOfResults; i++) {
         const ele = resultAlbums[i];
         for (let f = 0; f < ele.genre.length; f++) {
             genres += ele.genre[f];
@@ -249,7 +256,7 @@ function onLoad() {
     // /database/search ? q = { query } & { ? type, title, release_title, credit, artist, anv, label, genre, style, country, year, format, catno, barcode, track, submitter, contributor }
 
     //Run these to show on DOM
-    getTrendingAlbums(500, currentYear, apiKeyDiscogs);
+    // getTrendingAlbums(500, currentYear, apiKeyDiscogs);
     getTrendingSingles(5, currentYear, apiKeyDiscogs);
     getYouTubeRecommendations(replaceSpaceWithPlus("hip hop"), 12, apiKeyYouTube);
 }

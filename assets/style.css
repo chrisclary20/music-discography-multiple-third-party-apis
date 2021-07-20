@@ -20,3 +20,55 @@ body {
 .card-info {
     font-size: xx-small;
 }
+
+.search-input {
+    width: 100%;
+}
+
+.section {
+    padding-bottom: 0.5em;
+}
+
+.title-text {
+    margin-bottom: 1em;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.recently-searched {
+    margin-left: 2em;
+    margin-top: 3em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Dancing Script', cursive;
+}
+
+h1 {
+    font-size: 80px;
+}
+
+h3 {
+    font-size: 50px;
+}
+
+h4 {
+    font-size: 40px;
+}
+
+.main-container {
+    margin-top: 0;
+}
+
+.trending-singles-container {
+    padding-bottom: 2em;
+}
+
+.column {
+    padding-bottom: 1.5em;
+}
