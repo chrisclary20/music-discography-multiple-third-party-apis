@@ -12,7 +12,8 @@ var currentYear = moment().year();
 var apiKeyDiscogs = "ZkPKfcbrCFxLTLxNSjiZlgnTrLWdqMuIPPYUvVMx";
 //if quota is reached, create a new project then api key here: https://console.developers.google.com/apis/api/youtube.googleapis.com/overview?project=452704620540 and then update variable
 var apiKeyYouTube = "AIzaSyBQ2FNzqY1x54ZKwVKjCtRAyFOQKyR3wnI";
-
+//max search history
+var maxNumberOfMenuItems = 8;
 //set DOM year
 yearEl.innerHTML = currentYear;
 
@@ -23,15 +24,49 @@ searchButtonEl.addEventListener("click", function() {
 });
 
 function addRecentSearchButton(userEntry) {
+    //create object to add to local storage array
+    var recentSearch = {
+        input: userEntry,
+        genres: ""
+    };
     //add to DOM
-    var html = "<button class='button is-info is-medium is-fullwidth'>" + userEntry + "</button>";
-    searchHistoryEl.innerHTML += html;
+    var html = "<button class='button is-info is-medium is-fullwidth'>" + recentSearch.input + "</button>";
+    //add to DOM at the beginning of the element
+    searchHistoryEl.insertAdjacentHTML("afterbegin", html);
+    //if the max number is reached, remove the last item from the DOM
+    if (searchHistoryEl.children.length == maxNumberOfMenuItems + 1) {
+        searchHistoryEl.children[maxNumberOfMenuItems].remove();
+    }
     //add to json local storage array
-
+    // Parse any JSON previously stored in allEntries
+    var existingEntries = JSON.parse(localStorage.getItem("allSavedSearches"));
+    if (existingEntries == null) {
+        existingEntries = [];
+    }
+    if (existingEntries.length >= maxNumberOfMenuItems) {
+        //if >= maxNumberOfMenuItems remove one before adding
+        existingEntries.pop();
+    }
+    existingEntries.unshift(recentSearch);
+    localStorage.setItem("allSavedSearches", JSON.stringify(existingEntries));
     //clear search
     searchUserInputEl.value = "";
 }
 
+function populateRecentlySearched() {
+    var existingEntries = JSON.parse(localStorage.getItem("allSavedSearches"));
+    if (existingEntries != null) {
+        for (let i = 0; i < existingEntries.length; i++) {
+            searchHistoryEl.innerHTML += "<button class='button is-info is-medium is-fullwidth'>" + existingEntries[i].input + "</button>";;
+        }
+    }
+}
+
+//TODO: make search work here and on button
+searchHistoryEl.addEventListener("click", function(event) {
+    var userEntry = event.target.innerHTML;
+    console.log(userEntry);
+});
 
 //get recommendations from YouTube
 function getYouTubeRecommendations(userEntry, NumOfResults, apiKey) {
@@ -257,7 +292,8 @@ function onLoad() {
     //Run these to show on DOM
     // getTrendingAlbums(500, currentYear, apiKeyDiscogs);
     getTrendingSingles(5, currentYear, apiKeyDiscogs);
-    // getYouTubeRecommendations(replaceSpaceWithPlus("hip hop"), 12, apiKeyYouTube);
+    getYouTubeRecommendations(replaceSpaceWithPlus("hip hop"), 12, apiKeyYouTube);
+    populateRecentlySearched();
 }
 
 onLoad();
