@@ -1,0 +1,16 @@
+body {
+    background-color: #3A86FF;
+}
+
+ .pure-u-1 {
+    font-family: 'Poppins', sans-serif;;
+    text-align: center;
+    text-shadow: 2px 2px #df6c9e;
+    font-size: xx-large;
+    color: #FFBE0B;
+    box-sizing: border-box;
+    border: 1px solid #FFBE0B;
+    box-shadow: 16px 16px 2px 1px black;
+    margin: 0 0 0 0;
+} 
+
