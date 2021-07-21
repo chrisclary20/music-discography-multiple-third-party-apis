@@ -73,7 +73,6 @@ function populateRecentlySearched() {
     }
 }
 
-//TODO: make search work here and on button
 searchHistoryEl.addEventListener("click", function(event) {
     var userEntry = event.target.innerHTML;
     //need to search here and return albums
@@ -109,6 +108,17 @@ function updateYouTubeDom(results) {
             ele.title + "</p><p class='card-info'>" +
             ele.created + "</p></div></div></div></div></a></div>";
         recommendationsEl.innerHTML += html;
+    }
+}
+
+function onLoadYouTubeRecommendations(apiKey) {
+    // Parse any JSON previously stored in allEntries
+    var existingGenres = JSON.parse(localStorage.getItem("savedGenres"));
+    if (existingGenres == null) {
+        getYouTubeRecommendations("Top 40", 20, apiKey);
+    } else {
+        shuffleArray(existingGenres);
+        getYouTubeRecommendations(existingGenres[0] + " Music", 20, apiKey);
     }
 }
 
@@ -175,9 +185,10 @@ function updateTrendingAlbumDom(resultAlbums) {
 
 //get trending singles
 //https://api.discogs.com/database/search?year=2021&format=single&token=ZkPKfcbrCFxLTLxNSjiZlgnTrLWdqMuIPPYUvVMx
-function getTrendingSingles(rankThreshold, year, apiKey) {
+function getTrendingSingles(rankThreshold, year, genre, apiKey) {
     //create string to search by year
-    var constructedUrl = "https://api.discogs.com/database/search?year=" +
+    var constructedUrl = "https://api.discogs.com/database/search?genre=" +
+        genre + "&year=" +
         year + "&format=single&token=" + apiKey;
     //get the promise back and then once data comes back pass to update DOM
     var results = callDiscogsApi(constructedUrl, rankThreshold);
@@ -213,6 +224,18 @@ function updateTrendingSinglesDom(resultAlbums) {
     }
 }
 
+function onLoadGetTrendingSingles(apiKey) {
+    // Parse any JSON previously stored in allEntries
+    var existingGenres = JSON.parse(localStorage.getItem("savedGenres"));
+    if (existingGenres == null) {
+        getTrendingSingles(5, currentYear, "rock", apiKey);
+    } else {
+        shuffleArray(existingGenres);
+        getTrendingSingles(5, currentYear, existingGenres[0], apiKey);
+    }
+    // getTrendingSingles(rankThreshold, year, genre, apiKey)
+}
+
 //get recommended albums (you might like this...)
 //https://api.discogs.com/database/search?genre=hip+hop&token=ZkPKfcbrCFxLTLxNSjiZlgnTrLWdqMuIPPYUvVMx
 //currently spaces need to be passed as + sign, this might need to be checked for somewhere and logic added
@@ -242,12 +265,26 @@ function getSearchResults(rankThreshold, userEntry, apiKey) {
     var results = callDiscogsApi(constructedUrl, rankThreshold);
     results.then((data) => {
         updateSearchResultsDom(data);
+        saveRelevantGenres(data);
     });
+}
+
+//get a relevant list of genres and save to local storage
+function saveRelevantGenres(resultAlbums) {
+    console.log(resultAlbums);
+    const savedGenres = new Set()
+        //this does not get every genre because genres are an array when returned but it's enough
+    for (let i = 0; i < resultAlbums.length; i++) {
+        const ele = resultAlbums[i];
+        savedGenres.add(ele.genre[0]);
+    }
+    //change set to array and save to local storage
+    localStorage.setItem("savedGenres", JSON.stringify(Array.from(savedGenres)));
 }
 
 //update DOM for trending albums 
 function updateSearchResultsDom(resultAlbums) {
-    console.log(resultAlbums);
+
     mainTextEl.innerHTML = "Search results..."
     recommendationsEl.innerHTML = "";
     var html = "";
@@ -324,8 +361,15 @@ function onLoad() {
 
     //Run these to show on DOM
     // getTrendingAlbums(500, currentYear, apiKeyDiscogs);
-    getTrendingSingles(5, currentYear, apiKeyDiscogs);
-    getYouTubeRecommendations(replaceSpaceWithPlus("hip hop"), 12, apiKeyYouTube);
+    // getTrendingSingles(5, currentYear, apiKeyDiscogs);
+    onLoadGetTrendingSingles(apiKeyDiscogs);
+
+    //TODO: This needs to render dynamically based on genres associated with previous searches in local storage
+    //THEN DO MODAL OF CLICKED STUFF 
+    //THEN possibly make you might like this have both youtube and discog api results combined
+
+    // getYouTubeRecommendations(replaceSpaceWithPlus("hip hop"), 12, apiKeyYouTube);
+    // onLoadYouTubeRecommendations(apiKeyYouTube);
     populateRecentlySearched();
 }
 
