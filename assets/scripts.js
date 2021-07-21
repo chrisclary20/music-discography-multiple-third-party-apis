@@ -1,30 +1,74 @@
 // DOM elements
-var navBarEl = document.querySelector(".navbar");
-var homeLinkEl = document.querySelector(".home");
-var sourcesLinkEl = document.querySelector(".sources");
-var searchBoxEl = document.querySelector(".search-box");
-var rowBeforeAlbumsEl = document.querySelector(".row-before-albums");
-var trendingAlbumsEl = document.querySelector(".trending-albums");
-var rowBeforeSinglesEl = document.querySelector(".row-before-singles");
 var trendingSinglesEl = document.querySelector(".trending-singles");
-var subsectionSinglesEl = document.querySelector(".subsection-singles");
-var rowBeforeRecommendationsEl = document.querySelector(".row-before-rec");
 var recommendationsEl = document.querySelector(".recommendations");
-var rowBeforeSearchedEl = document.querySelector(".row-before-searched");
-var recentlySearchedEl = document.querySelector(".recently-searched");
+var yearEl = document.querySelector(".current-year");
+var searchUserInputEl = document.querySelector(".search-user-input");
+var searchButtonEl = document.querySelector(".user-search-button");
+var searchHistoryEl = document.querySelector(".search-history");
 
 //variables
 var currentYear = moment().year();
 //these would typically not be shown on the front end
-var apiKeySpotify = "BQCGIehYvduzpeprozD9T0YqWx_b9zVTzyRdIYcMo9ka2gw3VTAcShZ9yMAsfQ4HXvS4gPoI4ysIrM1XcNdSE98PftKvOWmA4JwRJ9114HjHF_TzdZbpHwYQUK_ZL0cSq8wVGZYfLQ-KPAA";
 var apiKeyDiscogs = "ZkPKfcbrCFxLTLxNSjiZlgnTrLWdqMuIPPYUvVMx";
 //if quota is reached, create a new project then api key here: https://console.developers.google.com/apis/api/youtube.googleapis.com/overview?project=452704620540 and then update variable
-var apiKeyYouTube = "AIzaSyCLtTtkim06HaBcHaSgqcua8vIt13zZ1js";
+var apiKeyYouTube = "AIzaSyBQ2FNzqY1x54ZKwVKjCtRAyFOQKyR3wnI";
+//max search history
+var maxNumberOfMenuItems = 8;
+//set DOM year
+yearEl.innerHTML = currentYear;
 
-//https://console.developers.google.com/apis/api/youtube.googleapis.com/overview?project=452704620540
-//https://www.googleapis.com/youtube/v3/search?part=snippet&q=php&key=AIzaSyCwB3g3unr3dVHwdzwiNXYYBKOoooVBS_Y
-// https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&qhip+hop&key=AIzaSyCLtTtkim06HaBcHaSgqcua8vIt13zZ1js
-//https://www.googleapis.com/youtube/v3/videos?id=BJzmJxLncO4&key=AIzaSyCLtTtkim06HaBcHaSgqcua8vIt13zZ1js&part=status
+//event listeners
+searchButtonEl.addEventListener("click", function() {
+    var userEntry = searchUserInputEl.value;
+    addRecentSearchButton(userEntry)
+});
+
+function addRecentSearchButton(userEntry) {
+    //create object to add to local storage array
+    var recentSearch = {
+        input: userEntry,
+        genres: ""
+    };
+    //add to DOM
+    var html = "<button class='button is-info is-medium is-fullwidth'>" + recentSearch.input + "</button>";
+    //add to DOM at the beginning of the element
+    searchHistoryEl.insertAdjacentHTML("afterbegin", html);
+    //if the max number is reached, remove the last item from the DOM
+    if (searchHistoryEl.children.length == maxNumberOfMenuItems + 1) {
+        searchHistoryEl.children[maxNumberOfMenuItems].remove();
+    }
+    //add to json local storage array
+    // Parse any JSON previously stored in allEntries
+    var existingEntries = JSON.parse(localStorage.getItem("allSavedSearches"));
+    if (existingEntries == null) {
+        existingEntries = [];
+    }
+    if (existingEntries.length >= maxNumberOfMenuItems) {
+        //if >= maxNumberOfMenuItems remove one before adding
+        existingEntries.pop();
+    }
+    existingEntries.unshift(recentSearch);
+    localStorage.setItem("allSavedSearches", JSON.stringify(existingEntries));
+    //clear search
+    searchUserInputEl.value = "";
+}
+
+function populateRecentlySearched() {
+    var existingEntries = JSON.parse(localStorage.getItem("allSavedSearches"));
+    if (existingEntries != null) {
+        for (let i = 0; i < existingEntries.length; i++) {
+            searchHistoryEl.innerHTML += "<button class='button is-info is-medium is-fullwidth'>" + existingEntries[i].input + "</button>";;
+        }
+    }
+}
+
+//TODO: make search work here and on button
+searchHistoryEl.addEventListener("click", function(event) {
+    var userEntry = event.target.innerHTML;
+    console.log(userEntry);
+});
+
+//get recommendations from YouTube
 function getYouTubeRecommendations(userEntry, NumOfResults, apiKey) {
     var constructedUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=" + NumOfResults +
         "&order=relevance&q=" +
@@ -36,21 +80,24 @@ function getYouTubeRecommendations(userEntry, NumOfResults, apiKey) {
     });
 }
 
-//https://www.googleapis.com/youtube/v3/videos?id=6CQEZ_kas0I&key=AIzaSyBQ2FNzqY1x54ZKwVKjCtRAyFOQKyR3wnI&part=snippet,contentDetails,status
-//https://www.youtube.com/get_video_info?video_id=6CQEZ_kas0I
-
 //update DOM with YouTube data 
 function updateYouTubeDom(results) {
-    console.log(results);
+    shuffleArray(results);
     var html = "";
+    var maxLength = 8;
+    if (results.length < 8) {
+        maxLength = results.length;
+    }
     for (let i = 0; i < results.length; i++) {
         const ele = results[i];
-        html = "<a href='https://www.youtube.com/watch?v=" + ele.videoId + "' target='_blank'><img class='album-art' src='" + ele.image.url + "' alt='" + ele.title + "'><h5>Title: " +
-            ele.title + "</h5></a><p>Channel Name: " + ele.channelName + "</p><p>Created: " +
-            ele.created + "</p>";
+        html = "<div class='column is-3'><a href='https://www.youtube.com/watch?v=" +
+            ele.videoId + "' target='_blank'><div class='card'><div class='card-image'><figure class='image is-4by3'><img src='" +
+            ele.image.url + "' alt='" +
+            ele.title + "'></figure></div><div class='card-content'><p class='card-title'>" +
+            ele.title + "</p><p class='card-info'>" +
+            ele.created + "</p></div></div></a></div>";
         recommendationsEl.innerHTML += html;
     }
-
 }
 
 async function getYouTubeApi(constructedUrl) {
@@ -67,14 +114,13 @@ async function getYouTubeApi(constructedUrl) {
                 title: ele.snippet.title,
                 videoId: ele.id.videoId,
                 image: ele.snippet.thumbnails.medium,
-                created: moment(ele.snippet.publishTime).format("MM-DD-YYYY"),
+                created: moment(ele.snippet.publishTime).format("M-DD-YYYY"),
                 channelName: ele.snippet.channelTitle
             }
             if (resultObject.videoId) {
                 resultObjects.push(resultObject);
             }
         }
-        console.log(data);
     });
     return resultObjects;
 }
@@ -94,7 +140,6 @@ function getTrendingAlbums(rankThreshold, year, apiKey) {
 
 //update DOM for trending albums 
 function updateTrendingAlbumDom(resultAlbums) {
-    console.log(resultAlbums);
     //trendingAlbumsEl
     var html = "";
     var genres = "";
@@ -106,8 +151,9 @@ function updateTrendingAlbumDom(resultAlbums) {
                 genres += " | ";
             }
         }
-        html = "<img class='album-art' src='" + ele.image + "' alt='" + ele.title + "'><h5>Title: " +
-            ele.title + "</h5><p>Genres: " + genres + "</p><p>Label: " + ele.label[0] + "</p><p></p>";
+        // html = "<img class='album-art' src='" + ele.image + "' alt='" + ele.title + "'><h5>Title: " +
+        //     ele.title + "</h5><p>Genres: " + genres + "</p><p>Label: " + ele.label[0] + "</p><p></p>";
+        html = "";
         trendingAlbumsEl.innerHTML += html;
         genres = "";
     }
@@ -131,11 +177,12 @@ function getTrendingSingles(rankThreshold, year, apiKey) {
 //update DOM for trending singles 
 //TODO: similar to updateTrendingAlbumDom - refactor function
 function updateTrendingSinglesDom(resultAlbums) {
-    console.log(resultAlbums);
-    //trendingAlbumsEl
+    //randomize the array
+    shuffleArray(resultAlbums);
     var html = "";
     var genres = "";
-    for (let i = 0; i < resultAlbums.length; i++) {
+    var numOfResults = 5; //max would be resultAlbums.length
+    for (let i = 0; i < numOfResults; i++) {
         const ele = resultAlbums[i];
         for (let f = 0; f < ele.genre.length; f++) {
             genres += ele.genre[f];
@@ -143,12 +190,17 @@ function updateTrendingSinglesDom(resultAlbums) {
                 genres += " | ";
             }
         }
-        html = "<img class='album-art' src='" + ele.image + "' alt='" + ele.title + "'><h5>Title: " +
-            ele.title + "</h5><p>Genres: " + genres + "</p><p>Label: " + ele.label[0] + "</p><p></p>";
-        subsectionSinglesEl.innerHTML += html;
+        html = "<div class='column is-one-fifth has-text-centered'><div class='card large'><div class='card-image'><figure class='image'><img src='" +
+            ele.image + "' alt='" +
+            ele.title + "'></figure></div><div class='card-content'><div class='media'><div class='media-content'><p class='card-title'>" +
+            ele.title + "</p><p class='card-info'>" +
+            genres + "</p><p class='card-info'>" +
+            ele.label[0] + "</p></div></div></div></div></div>";
+        trendingSinglesEl.innerHTML += html;
         genres = "";
     }
 }
+
 //get recommended albums (you might like this...)
 //https://api.discogs.com/database/search?genre=hip+hop&token=ZkPKfcbrCFxLTLxNSjiZlgnTrLWdqMuIPPYUvVMx
 //currently spaces need to be passed as + sign, this might need to be checked for somewhere and logic added
@@ -217,46 +269,31 @@ async function callDiscogsApi(constructedUrl, rankThreshold) {
     return resultObjects;
 }
 
-//https://github.com/JMPerez/spotify-web-api-js
-function getSpotifyApiTestUsingLibrary(bandId, apiKey) {
-    var spotifyApi = new SpotifyWebApi();
-    spotifyApi.setAccessToken(apiKey);
-    // get Elvis' albums, passing a callback. When a callback is passed, no Promise is returned
-    spotifyApi.getArtistAlbums(bandId, function(err, data) {
-        if (err) console.error(err);
-        else console.log('Artist albums', data);
-    });
-}
-
 //replace space with plus to pass to API URLs
 function replaceSpaceWithPlus(str) {
     return str.replace(/\s+/g, '+');
+}
+
+//Shuffles an array to randomize
+// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
 }
 
 //runs when page loads
 function onLoad() {
     // /database/search ? q = { query } & { ? type, title, release_title, credit, artist, anv, label, genre, style, country, year, format, catno, barcode, track, submitter, contributor }
 
-
-    //gets and prints from discog
-    // var test = getDiscogsApiTest(bandName, apiKeyDiscogs);
-    // test.then((data) => {
-    //     console.log(data);
-    // });
-
-    //gets and prints from spotify
-    // getSpotifyApiTestUsingLibrary("43ZHCT0cAZBISjO8DG9PnE", apiKeySpotify);
-
-    // getRecommendedAlbums(2000, "Hip+Hop", apiKeyDiscogs);
-    // getSearchResults(0, "jay-z", apiKeyDiscogs);
-    // getSearchResults(0, replaceSpaceWithPlus("Hip Hop"), apiKeyDiscogs);
-    // youTubeTest(replaceSpaceWithPlus("hip hop"), apiKeyYouTube);
-
-
     //Run these to show on DOM
-    getTrendingAlbums(500, currentYear, apiKeyDiscogs);
+    // getTrendingAlbums(500, currentYear, apiKeyDiscogs);
     getTrendingSingles(5, currentYear, apiKeyDiscogs);
     getYouTubeRecommendations(replaceSpaceWithPlus("hip hop"), 12, apiKeyYouTube);
+    populateRecentlySearched();
 }
 
 onLoad();
