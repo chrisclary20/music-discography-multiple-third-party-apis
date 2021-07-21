@@ -72,3 +72,7 @@ h4 {
 .column {
     padding-bottom: 1.5em;
 }
+
+.modal-card-title {
+    color: ghostwhite;
+}

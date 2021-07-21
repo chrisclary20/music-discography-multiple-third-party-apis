@@ -1,6 +1,8 @@
 :root {
     --bg: #071e36;
     --card-bg: #041221;
+    --modal-bg: #1f73ce;
+    --modal-card-bg: #15569b;
 }
 
 body {
@@ -61,4 +63,18 @@ strong {
 
 .recent-searches {
     width: 100%;
+}
+
+.modal-card-head,
+.modal-card-foot {
+    background-color: var(--modal-card-bg);
+    border: 0;
+}
+
+.modal-card-body {
+    background-color: var(--modal-bg);
+}
+
+.modal-image {
+    width: 80%;
 }
