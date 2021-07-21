@@ -5,6 +5,8 @@ var yearEl = document.querySelector(".current-year");
 var searchUserInputEl = document.querySelector(".search-user-input");
 var searchButtonEl = document.querySelector(".user-search-button");
 var searchHistoryEl = document.querySelector(".search-history");
+var mainTextEl = document.querySelector(".main-text");
+
 
 //variables
 var currentYear = moment().year();
@@ -20,7 +22,16 @@ yearEl.innerHTML = currentYear;
 //event listeners
 searchButtonEl.addEventListener("click", function() {
     var userEntry = searchUserInputEl.value;
-    addRecentSearchButton(userEntry)
+    addRecentSearchButton(userEntry);
+    getSearchResults(100, userEntry, apiKeyDiscogs);
+});
+
+searchUserInputEl.addEventListener("keyup", function(event) {
+    if (event.key === 'Enter') {
+        var userEntry = searchUserInputEl.value;
+        addRecentSearchButton(userEntry);
+        getSearchResults(100, userEntry, apiKeyDiscogs);
+    }
 });
 
 function addRecentSearchButton(userEntry) {
@@ -65,7 +76,8 @@ function populateRecentlySearched() {
 //TODO: make search work here and on button
 searchHistoryEl.addEventListener("click", function(event) {
     var userEntry = event.target.innerHTML;
-    console.log(userEntry);
+    //need to search here and return albums
+    getSearchResults(100, userEntry, apiKeyDiscogs);
 });
 
 //get recommendations from YouTube
@@ -90,12 +102,12 @@ function updateYouTubeDom(results) {
     }
     for (let i = 0; i < results.length; i++) {
         const ele = results[i];
-        html = "<div class='column is-3'><a href='https://www.youtube.com/watch?v=" +
-            ele.videoId + "' target='_blank'><div class='card'><div class='card-image'><figure class='image is-4by3'><img src='" +
+        html = "<div class='column is-one-fifth has-text-centered'><a href='https://www.youtube.com/watch?v=" +
+            ele.videoId + "' target='_blank'><div class='card large'><div class='card-image'><figure class='image'><img src='" +
             ele.image.url + "' alt='" +
-            ele.title + "'></figure></div><div class='card-content'><p class='card-title'>" +
+            ele.title + "'></figure></div><div class='card-content'><div class='media'><div class='media-content'><p class='card-title'>" +
             ele.title + "</p><p class='card-info'>" +
-            ele.created + "</p></div></div></a></div>";
+            ele.created + "</p></div></div></div></div></a></div>";
         recommendationsEl.innerHTML += html;
     }
 }
@@ -236,6 +248,27 @@ function getSearchResults(rankThreshold, userEntry, apiKey) {
 //update DOM for trending albums 
 function updateSearchResultsDom(resultAlbums) {
     console.log(resultAlbums);
+    mainTextEl.innerHTML = "Search results..."
+    recommendationsEl.innerHTML = "";
+    var html = "";
+    var genres = "";
+    for (let i = 0; i < resultAlbums.length; i++) {
+        const ele = resultAlbums[i];
+        for (let f = 0; f < ele.genre.length; f++) {
+            genres += ele.genre[f];
+            if (f < ele.genre.length - 1) {
+                genres += " | ";
+            }
+        }
+        html = "<div class='column is-one-fifth has-text-centered'><div class='card large'><div class='card-image'><figure class='image'><img src='" +
+            ele.image + "' alt='" +
+            ele.title + "'></figure></div><div class='card-content'><div class='media'><div class='media-content'><p class='card-title'>" +
+            ele.title + "</p><p class='card-info'>" +
+            genres + "</p><p class='card-info'>" +
+            ele.label[0] + "</p></div></div></div></div></div>";
+        recommendationsEl.innerHTML += html;
+        genres = "";
+    }
 }
 
 async function callDiscogsApi(constructedUrl, rankThreshold) {
