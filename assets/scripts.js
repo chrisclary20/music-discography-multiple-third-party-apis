@@ -6,6 +6,10 @@ var searchUserInputEl = document.querySelector(".search-user-input");
 var searchButtonEl = document.querySelector(".user-search-button");
 var searchHistoryEl = document.querySelector(".search-history");
 var mainTextEl = document.querySelector(".main-text");
+var modalClickEl = document.querySelector(".modal-click");
+var modalInfoEl = document.querySelector(".modal-info");
+var exitModalButtonEl = document.querySelector(".exit-modal");
+var modalBackgroundEl = document.querySelector(".modal-background");
 
 
 //variables
@@ -34,6 +38,40 @@ searchUserInputEl.addEventListener("keyup", function(event) {
     }
 });
 
+//when clicking search a history button
+searchHistoryEl.addEventListener("click", function(event) {
+    var userEntry = event.target.innerHTML;
+    //need to search here and return albums
+    getSearchResults(100, userEntry, apiKeyDiscogs);
+});
+
+//when clicking the exit modal button
+exitModalButtonEl.addEventListener("click", function(event) {
+    modalInfoEl.classList.remove("is-active");
+});
+
+//when clicking modal background
+modalBackgroundEl.addEventListener("click", function(event) {
+    modalInfoEl.classList.remove("is-active");
+});
+
+//when clicking a trending singles card
+trendingSinglesEl.addEventListener("click", function(event) {
+    var userEntry = event.target.closest(".modal-click");
+    if (userEntry) {
+        modalInfoEl.classList.add("is-active");
+    }
+});
+
+//when clicking record that was returned
+recommendationsEl.addEventListener("click", function(event) {
+    var userEntry = event.target.closest(".modal-click");
+    if (userEntry) {
+        modalInfoEl.classList.add("is-active");
+    }
+});
+
+//add search entry to DOM and local storage
 function addRecentSearchButton(userEntry) {
     //create object to add to local storage array
     var recentSearch = {
@@ -64,6 +102,7 @@ function addRecentSearchButton(userEntry) {
     searchUserInputEl.value = "";
 }
 
+//get recent searches from local storage and render them
 function populateRecentlySearched() {
     var existingEntries = JSON.parse(localStorage.getItem("allSavedSearches"));
     if (existingEntries != null) {
@@ -72,12 +111,6 @@ function populateRecentlySearched() {
         }
     }
 }
-
-searchHistoryEl.addEventListener("click", function(event) {
-    var userEntry = event.target.innerHTML;
-    //need to search here and return albums
-    getSearchResults(100, userEntry, apiKeyDiscogs);
-});
 
 //get recommendations from YouTube
 function getYouTubeRecommendations(userEntry, NumOfResults, apiKey) {
@@ -111,6 +144,7 @@ function updateYouTubeDom(results) {
     }
 }
 
+//load youtube recommendations from genres saved to local storage 
 function onLoadYouTubeRecommendations(apiKey) {
     // Parse any JSON previously stored in allEntries
     var existingGenres = JSON.parse(localStorage.getItem("savedGenres"));
@@ -122,6 +156,7 @@ function onLoadYouTubeRecommendations(apiKey) {
     }
 }
 
+//connect and return data from youtube
 async function getYouTubeApi(constructedUrl) {
     var resultObjects = [];
     //get a response and then iterate through data, if it is ranked high enough add the object to the array
@@ -179,8 +214,6 @@ function updateTrendingAlbumDom(resultAlbums) {
         trendingAlbumsEl.innerHTML += html;
         genres = "";
     }
-
-
 }
 
 //get trending singles
@@ -213,7 +246,7 @@ function updateTrendingSinglesDom(resultAlbums) {
                 genres += " | ";
             }
         }
-        html = "<div class='column is-one-fifth has-text-centered'><div class='card large'><div class='card-image'><figure class='image'><img src='" +
+        html = "<div class='column is-one-fifth has-text-centered'><div class='card large modal-click'><div class='card-image'><figure class='image'><img src='" +
             ele.image + "' alt='" +
             ele.title + "'></figure></div><div class='card-content'><div class='media'><div class='media-content'><p class='card-title'>" +
             ele.title + "</p><p class='card-info'>" +
@@ -224,6 +257,7 @@ function updateTrendingSinglesDom(resultAlbums) {
     }
 }
 
+//load trending singles based on a genre from local storage gotten during search
 function onLoadGetTrendingSingles(apiKey) {
     // Parse any JSON previously stored in allEntries
     var existingGenres = JSON.parse(localStorage.getItem("savedGenres"));
@@ -233,7 +267,6 @@ function onLoadGetTrendingSingles(apiKey) {
         shuffleArray(existingGenres);
         getTrendingSingles(5, currentYear, existingGenres[0], apiKey);
     }
-    // getTrendingSingles(rankThreshold, year, genre, apiKey)
 }
 
 //get recommended albums (you might like this...)
@@ -297,7 +330,7 @@ function updateSearchResultsDom(resultAlbums) {
                 genres += " | ";
             }
         }
-        html = "<div class='column is-one-fifth has-text-centered'><div class='card large'><div class='card-image'><figure class='image'><img src='" +
+        html = "<div class='column is-one-fifth has-text-centered'><div class='card large modal-click'><div class='card-image'><figure class='image'><img src='" +
             ele.image + "' alt='" +
             ele.title + "'></figure></div><div class='card-content'><div class='media'><div class='media-content'><p class='card-title'>" +
             ele.title + "</p><p class='card-info'>" +
@@ -308,6 +341,7 @@ function updateSearchResultsDom(resultAlbums) {
     }
 }
 
+//call and get data from discogs API and return custom object array
 async function callDiscogsApi(constructedUrl, rankThreshold) {
     var resultObjects = [];
     //get a response and then iterate through data, if it is ranked high enough add the object to the array
@@ -360,17 +394,15 @@ function onLoad() {
     // /database/search ? q = { query } & { ? type, title, release_title, credit, artist, anv, label, genre, style, country, year, format, catno, barcode, track, submitter, contributor }
 
     //Run these to show on DOM
-    // getTrendingAlbums(500, currentYear, apiKeyDiscogs);
-    // getTrendingSingles(5, currentYear, apiKeyDiscogs);
     onLoadGetTrendingSingles(apiKeyDiscogs);
+    // onLoadYouTubeRecommendations(apiKeyYouTube);
+    populateRecentlySearched();
 
-    //TODO: This needs to render dynamically based on genres associated with previous searches in local storage
+    //TODO:
     //THEN DO MODAL OF CLICKED STUFF 
     //THEN possibly make you might like this have both youtube and discog api results combined
 
-    // getYouTubeRecommendations(replaceSpaceWithPlus("hip hop"), 12, apiKeyYouTube);
-    // onLoadYouTubeRecommendations(apiKeyYouTube);
-    populateRecentlySearched();
+
 }
 
 onLoad();
