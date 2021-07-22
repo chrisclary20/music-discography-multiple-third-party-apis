@@ -18,7 +18,7 @@ var currentYear = moment().year();
 //these would typically not be shown on the front end
 var apiKeyDiscogs = "ZkPKfcbrCFxLTLxNSjiZlgnTrLWdqMuIPPYUvVMx";
 //if quota is reached, create a new project then api key here: https://console.developers.google.com/apis/api/youtube.googleapis.com/overview?project=452704620540 and then update variable
-var apiKeyYouTube = "AIzaSyCAE4qkXoimjyzTTElPlKHCPuRwMSwoRHA";
+var apiKeyYouTube = "AIzaSyDE-93dGZyt_YX4y5nQIpNIO5Kq8Lwx9Ok";
 //max search history
 var maxNumberOfMenuItems = 8;
 //set DOM year
@@ -154,7 +154,7 @@ function updateYouTubeDom(results) {
     shuffleArray(results);
     var html = "";
     var maxLength = 20;
-    if (results.length < maxLength) {
+    if (results.length < 8) {
         maxLength = results.length;
     }
     for (let i = 0; i < maxLength; i++) {
@@ -166,32 +166,6 @@ function updateYouTubeDom(results) {
             ele.title + "</p><p class='card-info'>" +
             ele.created + "</p></div></div></div></div></a></div>";
         recommendationsEl.innerHTML += html;
-    }
-}
-
-function updateDomFromDicogs(resultAlbums, maxResults, elementUpdated) {
-    elementUpdated.innerHTML = "";
-    var html = "";
-    var genres = "";
-    if (resultAlbums.length < maxResults) {
-        maxResults = resultAlbums.length;
-    }
-    for (let i = 0; i < maxResults; i++) {
-        const ele = resultAlbums[i];
-        for (let f = 0; f < ele.genre.length; f++) {
-            genres += ele.genre[f];
-            if (f < ele.genre.length - 1) {
-                genres += " | ";
-            }
-        }
-        html = "<div class='column is-one-fifth has-text-centered'><div class='card large modal-click'><div class='card-image'><figure class='image'><img class='content-image' src='" +
-            ele.image + "' alt='" +
-            ele.title + "'></figure></div><div class='card-content'><div class='media'><div class='media-content'><p class='card-title'>" +
-            ele.title + "</p><p class='card-info'>" +
-            genres + "</p><p class='card-info'>" +
-            ele.label[0] + "</p></div></div></div></div></div>";
-        elementUpdated.innerHTML += html;
-        genres = "";
     }
 }
 
@@ -301,6 +275,32 @@ function updateSearchResultsDom(resultAlbums) {
     updateDomFromDicogs(resultAlbums, 50, recommendationsEl);
 }
 
+function updateDomFromDicogs(resultAlbums, maxResults, elementUpdated) {
+    elementUpdated.innerHTML = "";
+    var html = "";
+    var genres = "";
+    if (resultAlbums.length < maxResults) {
+        maxResults = resultAlbums.length;
+    }
+    for (let i = 0; i < maxResults; i++) {
+        const ele = resultAlbums[i];
+        for (let f = 0; f < ele.genre.length; f++) {
+            genres += ele.genre[f];
+            if (f < ele.genre.length - 1) {
+                genres += " | ";
+            }
+        }
+        html = "<div class='column is-one-fifth has-text-centered'><div class='card large modal-click'><div class='card-image'><figure class='image'><img class='content-image' src='" +
+            ele.image + "' alt='" +
+            ele.title + "'></figure></div><div class='card-content'><div class='media'><div class='media-content'><p class='card-title'>" +
+            ele.title + "</p><p class='card-info'>" +
+            genres + "</p><p class='card-info'>" +
+            ele.label[0] + "</p></div></div></div></div></div>";
+        elementUpdated.innerHTML += html;
+        genres = "";
+    }
+}
+
 //call and get data from discogs API and return custom object array
 async function callDiscogsApi(constructedUrl, rankThreshold) {
     var resultObjects = [];
@@ -355,9 +355,6 @@ function onLoad() {
     onLoadGetTrendingSingles(apiKeyDiscogs);
     onLoadYouTubeRecommendations(apiKeyYouTube);
     populateRecentlySearched();
-
-    //TODO:
-    //THEN possibly make you might like this have both youtube and discog api results combined
 }
 
 onLoad();
