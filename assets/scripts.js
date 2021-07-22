@@ -154,7 +154,7 @@ function updateYouTubeDom(results) {
     shuffleArray(results);
     var html = "";
     var maxLength = 20;
-    if (results.length < 8) {
+    if (results.length < maxLength) {
         maxLength = results.length;
     }
     for (let i = 0; i < maxLength; i++) {

@@ -90,3 +90,7 @@ strong {
 ::-webkit-scrollbar-thumb {
     box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.3);
 }
+
+.sources-body {
+    background-color: var(--modal-card-bg);
+}

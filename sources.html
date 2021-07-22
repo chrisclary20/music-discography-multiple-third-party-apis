@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Discography</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script src="https://kit.fontawesome.com/7dc3015a44.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./assets/cards.css">
+    <link rel="stylesheet" href="./assets/style.css">
+</head>
+
+<body class="sources-body">
+    <!-- Template: https://github.com/BulmaTemplates/bulma-templates/blob/master/templates/cards.html -->
+    <!-- START NAV -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="/">
+                    <img class="nav-bar" src="./assets/discogra-logo.png" alt="Logo">
+                </a>
+            </div>
+            <div id="navbarMenu" class="navbar-menu">
+                <div class="navbar-end">
+                    <a class="navbar-item" href="/">
+                    Home
+                  </a>
+                    <a class="navbar-item is-active" href="sources.html">
+                    Sources
+                  </a>
+                </div>
+            </div>
+    </nav>
+    <!-- END NAV -->
+    <div class="container">
+        <div>
+            <div class="columns main-container">
+                <div class="column is-one">
+                    <div class="column has-text-centered title-text">
+                        <h1 class="main-text">Sources</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="columns main-container">
+        <div class="column is-one-half">
+            <div class="discogs-logo">
+                <a href="https://www.discogs.com/developers" target="_blank">
+                    <img class="source-images" src="./assets/discogs-logo.svg" alt="discogs-logo">
+                </a>
+            </div>
+        </div>
+        <div class="column is-one-half">
+            <div class="youtube-logo">
+                <a href="https://developers.google.com/youtube/v3/docs/search/list" target="_blank">
+                    <img class="source-images" src="./assets/youtube-logo.png" alt="youtube-logo">
+                </a>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered">
+                <div class="soc">
+                    <a href="https://github.com/DavidTunnell/music-discography-multiple-third-party-apis" target="_blank">
+                        <i class="fa fa-github-alt fa-lg" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <p>
+                    <strong>Discogra Music Finding</strong>
+                    <span class="current-year"></span>
+                </p>
+            </div>
+        </div>
+    </footer>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+    <script src="./assets/scripts.js"></script>
+</body>
+
+</html>
