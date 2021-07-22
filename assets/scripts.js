@@ -181,7 +181,7 @@ function onLoadYouTubeRecommendations(apiKey) {
     }
 }
 
-//connect and return data from youtube
+//connect and return data from YouTube
 async function getYouTubeApi(constructedUrl) {
     var resultObjects = [];
     //get a response and then iterate through data, if it is ranked high enough add the object to the array
@@ -275,6 +275,7 @@ function updateSearchResultsDom(resultAlbums) {
     updateDomFromDicogs(resultAlbums, 50, recommendationsEl);
 }
 
+//updates the dom for trending singles and search results
 function updateDomFromDicogs(resultAlbums, maxResults, elementUpdated) {
     elementUpdated.innerHTML = "";
     var html = "";
