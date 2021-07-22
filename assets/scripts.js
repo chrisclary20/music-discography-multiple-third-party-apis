@@ -226,28 +226,8 @@ function getTrendingSingles(rankThreshold, year, genre, apiKey) {
 function updateTrendingSinglesDom(resultAlbums) {
     //randomize the array
     shuffleArray(resultAlbums);
-    var html = "";
-    var genres = "";
     var numOfResults = 5; //max would be resultAlbums.length
-    for (let i = 0; i < numOfResults; i++) {
-        const ele = resultAlbums[i];
-        //iterate through genre array
-        for (let f = 0; f < ele.genre.length; f++) {
-            genres += ele.genre[f];
-            if (f < ele.genre.length - 1) {
-                genres += " | ";
-            }
-        }
-        //build and add html
-        html = "<div class='column is-one-fifth has-text-centered'><div class='card large modal-click'><div class='card-image'><figure class='image'><img class='content-image' src='" +
-            ele.image + "' alt='" +
-            ele.title + "'></figure></div><div class='card-content'><div class='media'><div class='media-content'><p class='card-title'>" +
-            ele.title + "</p><p class='card-info'>" +
-            genres + "</p><p class='card-info'>" +
-            ele.label[0] + "</p></div></div></div></div></div>";
-        trendingSinglesEl.innerHTML += html;
-        genres = "";
-    }
+    updateDomFromDicogs(resultAlbums, numOfResults, trendingSinglesEl);
 }
 
 //load trending singles based on a genre from local storage gotten during search
@@ -291,12 +271,18 @@ function saveRelevantGenres(resultAlbums) {
 
 //update DOM for trending albums 
 function updateSearchResultsDom(resultAlbums) {
-
     mainTextEl.innerHTML = "Search results..."
-    recommendationsEl.innerHTML = "";
+    updateDomFromDicogs(resultAlbums, 50, recommendationsEl);
+}
+
+function updateDomFromDicogs(resultAlbums, maxResults, elementUpdated) {
+    elementUpdated.innerHTML = "";
     var html = "";
     var genres = "";
-    for (let i = 0; i < resultAlbums.length; i++) {
+    if (resultAlbums.length < maxResults) {
+        maxResults = resultAlbums.length;
+    }
+    for (let i = 0; i < maxResults; i++) {
         const ele = resultAlbums[i];
         for (let f = 0; f < ele.genre.length; f++) {
             genres += ele.genre[f];
@@ -310,7 +296,7 @@ function updateSearchResultsDom(resultAlbums) {
             ele.title + "</p><p class='card-info'>" +
             genres + "</p><p class='card-info'>" +
             ele.label[0] + "</p></div></div></div></div></div>";
-        recommendationsEl.innerHTML += html;
+        elementUpdated.innerHTML += html;
         genres = "";
     }
 }
