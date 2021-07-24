@@ -28,28 +28,28 @@ It can be seen live here: https://davidtunnell.github.io/music-discography-multi
 
 ## Main
 
-![Screenshot](./assets/main-screenshot.png)
+![Screenshot](./assets/images/main-screenshot.png)
 
 ## Dynamic YouTube Recommendations
 
-![Screenshot](./assets/youtube-recommendations.png)
+![Screenshot](./assets/images/youtube-recommendations.png)
 
 ## Dynamic Discog Single Recommendations
 
-![Screenshot](./assets/singles.png)
+![Screenshot](./assets/images/singles.png)
 
 ## Search Results
 
-![Screenshot](./assets/search-results.png)
+![Screenshot](./assets/images/search-results.png)
 
 ## Saved Recent Searches
 
-![Screenshot](./assets/saved-menu.png)
+![Screenshot](./assets/images/saved-menu.png)
 
 ## Details Modal for Discogs Results
 
-![Screenshot](./assets/modal.png)
+![Screenshot](./assets/images/modal.png)
 
 ## Sources Page
 
-![Screenshot](./assets/sources.png)
+![Screenshot](./assets/images/sources.png)
