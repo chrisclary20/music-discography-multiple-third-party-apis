@@ -70,11 +70,6 @@ h4 {
     padding-bottom: 2em;
 }
 
-.main-container:hover,
-.trending-singles-container:hover {
-    box-shadow: inset 0px 0px 8px rgb(123, 123, 250), 0 0 15px rgb(123, 123, 250);
-}
-
 .column {
     padding-bottom: 1.5em;
 }
