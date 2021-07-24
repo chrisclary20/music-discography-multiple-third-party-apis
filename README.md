@@ -26,4 +26,30 @@ It can be seen live here: https://davidtunnell.github.io/music-discography-multi
 
 # Screenshots
 
-Screenshot section.
+## Main
+
+![Screenshot](./assets/main-screenshot.png)
+
+## Dynamic YouTube Recommendations
+
+![Screenshot](./assets/youtube-recommendations.png)
+
+## Dynamic Discog Single Recommendations
+
+![Screenshot](./assets/singles.png)
+
+## Search Results
+
+![Screenshot](./assets/search-results.png)
+
+## Saved Recent Searches
+
+![Screenshot](./assets/saved-menu.png)
+
+## Details Modal for Discogs Results
+
+![Screenshot](./assets/modal.png)
+
+## Sources Page
+
+![Screenshot](./assets/sources.png)

@@ -17,8 +17,8 @@ var modalTitleEl = document.querySelector(".modal-card-title");
 var currentYear = moment().year();
 //these would typically not be shown on the front end
 var apiKeyDiscogs = "ZkPKfcbrCFxLTLxNSjiZlgnTrLWdqMuIPPYUvVMx";
-//if quota is reached, create a new project then api key here: https://console.developers.google.com/apis/api/youtube.googleapis.com/overview?project=452704620540 and then update variable
-var apiKeyYouTube = "AIzaSyDE-93dGZyt_YX4y5nQIpNIO5Kq8Lwx9Ok";
+//if quota is reached, create a new project then api key here (update project name in URL): https://console.developers.google.com/apis/api/youtube.googleapis.com/overview?project=452704620540 and then update variable
+var apiKeyYouTube = "AIzaSyCzkHtg-eRycXCXbNJEvoEJvRc79n5xvB8";
 //max search history
 var maxNumberOfMenuItems = 8;
 //set DOM year
