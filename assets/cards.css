@@ -11,16 +11,28 @@ body {
     background: var(--card-bg);
 }
 
+input:hover {
+    background-image: linear-gradient(to bottom right, rgb(250, 119, 119), rgb(123, 123, 250), rgb(89, 160, 89));
+
+}
+
 input::placeholder {
     color: antiquewhite;
 }
+
 
 .navbar {
     background: var(--card-bg);
 }
 
-.navbar-item {
+.navbar-menu {
+    outline-color: ghostwhite;
+}
+
+
+.navbar-item   {
     color: ghostwhite;
+    box-shadow: inset 0px 0px 8px var(--bg), 0 0 15px var(--bg);
 }
 
 
@@ -61,4 +73,5 @@ strong {
 
 .recent-searches {
     width: 100%;
+    -moz-box-shadow: 0 0 10em #6fabf0;
 }
