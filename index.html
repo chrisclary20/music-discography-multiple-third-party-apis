@@ -19,45 +19,27 @@
     <nav class="navbar">
         <div class="container">
             <div class="navbar-brand">
-                <a href="#">
+                <a href="/">
                     <img class="nav-bar" src="./assets/discogra-logo.png" alt="Logo">
                 </a>
-                <span class="navbar-burger burger" data-target="navbarMenu">
-            <span></span>
-                <span></span>
-                <span></span>
-                </span>
             </div>
             <div id="navbarMenu" class="navbar-menu">
                 <div class="navbar-end">
-                    <a class="navbar-item is-active">
-              Home
-            </a>
-                    <a class="navbar-item">
-              Examples
-            </a>
-                    <a class="navbar-item">
-              Features
-            </a>
-                    <a class="navbar-item">
-              Team
-            </a>
-                    <a class="navbar-item">
-              Archives
-            </a>
-                    <a class="navbar-item">
-              Help
-            </a>
+                    <a class="navbar-item is-active" href="/">
+                    Home
+                  </a>
+                    <a class="navbar-item" href="sources.html">
+                    Sources
+                  </a>
                 </div>
             </div>
-        </div>
     </nav>
     <!-- END NAV -->
     <div class="container">
         <div class="section">
             <div class="field has-addons">
                 <div class="control search-input">
-                    <input class="input search-user-input" type="text" placeholder="Enter a Band or Album...">
+                    <input class="input search-user-input" type="text" placeholder="Enter a Band, Album or Genre...">
                 </div>
                 <div class="control user-search-button">
                     <a class="button is-info">
@@ -72,10 +54,10 @@
             <div class="columns main-container">
                 <div class="column is-two-thirds">
                     <div class="column has-text-centered title-text">
-                        <h1>You might like this...</h1>
+                        <h1 class="main-text">You might like this...</h1>
                     </div>
                     <div class="row columns">
-                        <div class='columns is-multiline recommendations'>
+                        <div class='columns is-multiline has-text-centered recommendations'>
                         </div>
                     </div>
                 </div>
@@ -98,11 +80,11 @@
             </div>
         </div>
     </div>
-    <footer class="footer ">
-        <div class="container ">
-            <div class="content has-text-centered ">
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered">
                 <div class="soc">
-                    <a href="https://github.com/DavidTunnell/music-discography-multiple-third-party-apis">
+                    <a href="https://github.com/DavidTunnell/music-discography-multiple-third-party-apis" target="_blank">
                         <i class="fa fa-github-alt fa-lg" aria-hidden="true"></i>
                     </a>
                 </div>
@@ -113,7 +95,19 @@
             </div>
         </div>
     </footer>
-
+    <div class="modal modal-info">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Modal title</p>
+                <button class="delete exit-modal" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body has-text-centered">
+            </section>
+            <footer class="modal-card-foot">
+            </footer>
+        </div>
+    </div>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
     <script src="./assets/scripts.js"></script>
 </body>

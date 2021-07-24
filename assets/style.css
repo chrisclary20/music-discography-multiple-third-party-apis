@@ -78,4 +78,17 @@ h4 {
 .column {
     padding-bottom: 1.5em;
 }
-
+    
+    .modal-card-title {
+        color: ghostwhite;
+    }
+    
+    .source-images {
+        width: 60%;
+    }
+    
+    @media only screen and (max-width: 786px) {
+        .recently-searched {
+            margin-left: 0em;
+        }
+    }
