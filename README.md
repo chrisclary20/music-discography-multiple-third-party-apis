@@ -8,11 +8,11 @@ It uses the following technologies.
 * [Bulma CSS Library](https://bulma.io/) for styling and layout
     * [Bulma Cards Template](https://github.com/BulmaTemplates/bulma-templates/blob/master/templates/cards.html)
 * [Moment.js](https://momentjs.com/) to work with time
-* [Font Awesome](https://fontawesome.com/) and [Google Fonts](https://fonts.google.com/) for the github icon and font styling
+* [Font Awesome](https://fontawesome.com/) and [Google Fonts](https://fonts.google.com/) for the GitHub icon and font styling
 
 It has the following functionality.
 
-* Connect to two server side APIs and renders dynamic results based on user entry
+* Connects to two server side APIs and renders dynamic results based on user entry
 * Utilizes the open source CSS library [Bulma](https://github.com/jgthms/bulma)
 * Utilizes local storage to store persistent user data such as saving of users input and data including genres related to searches and previous search history
 * Customized Bulma Modal to show details of results from the Discogs API
@@ -23,6 +23,10 @@ It has the following functionality.
 * An interactive saved search history of previous searches
 
 It can be seen live here: https://davidtunnell.github.io/music-discography-multiple-third-party-apis/
+
+## Connections
+
+Near the top of the scripts.js file there is a variables section where API keys can be updated for connection after pulling the repo. The YouTube free API limit in particular is relatively low so if it runs out you can create a new project and then new API key in Google Dev Console and then enable YouTube v3 API also.
 
 # Screenshots
 
